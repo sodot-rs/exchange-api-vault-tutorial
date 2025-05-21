@@ -1,0 +1,37 @@
+{
+  "name": "@sodot/exchange-api-vault-tutorial",
+  "version": "1.0.0",
+  "description": "A tutorial for using the Exchange API Vault",
+  "author": "Sodot Inc.",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "tsx index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "dotenv": "^16.5.0",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.7.2"
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "dist/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "dependencies": {
+    "@sodot/sodot-hmac-key-sharing": "^1.1.0",
+    "ws": "^8.18.2"
+  }
+}
