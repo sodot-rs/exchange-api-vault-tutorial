@@ -37,6 +37,9 @@ CLUSTER_NAME=<YOUR_VERTEX_CLUSTER_NAME | aae33597-8c2c-4fa9-89ca-f73780596f27>
 # The API keys for the exchange, in this case, we are using Binance
 BINANCE_API_KEY=<YOUR_BINANCE_API_KEY>
 BINANCE_API_SECRET=<YOUR_BINANCE_API_SECRET>
+
+# You will also need an NPM toke from Sodot:
+NPM_TOKEN=<YOUR_NPM_TOKEN>
 ```
 
 ### Run the example
