@@ -1,6 +1,7 @@
 import { splitHmacSha256KeyIntoShares } from '@sodot/sodot-hmac-key-sharing';
 import { randomUUID } from 'crypto';
 import * as dotenv from 'dotenv';
+import { loadVerticesFromEnv } from './utils';
 
 async function main() {
   const binanceApiKey = process.env.BINANCE_API_KEY;
@@ -25,7 +26,7 @@ async function main() {
   await attachPolicy(clusterKeyName, CONFIGURED_POLICY_NAME);
   console.log('Policy attached successfully.');
 
-  // Now lets send a trade request to Binance
+  // Now let's send a trade request to Binance
   await buySomeBtc(binanceApiKey, clusterKeyName);
   console.log('Trade request sent successfully.');
 }
@@ -194,28 +195,6 @@ async function attachPolicy(keyName: string, policyName: string) {
   );
 
   console.log(`Policy ${policyName} attached to key ${keyName} successfully.`);
-}
-
-function loadVerticesFromEnv() {
-  let vertices: any = [];
-  for (let i = 0; i < 3; i++) {
-    const vertexUrl = process.env[`VERTEX_${i}_URL`];
-    if (!vertexUrl) {
-      throw `VERTEX_${i}_URL is not defined in the environment variables.`;
-    }
-
-    const VertexApiKey = process.env[`VERTEX_${i}_API_KEY`];
-    if (!VertexApiKey) {
-      throw `VERTEX_${i}_API_KEY is not defined in the environment variables.`;
-    }
-
-    vertices.push({
-      url: vertexUrl,
-      apiKey: VertexApiKey,
-    });
-  }
-
-  return vertices;
 }
 
 dotenv.config();

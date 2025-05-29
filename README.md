@@ -3,15 +3,16 @@
 This is a minimal JS code example that demonstrates the basic usage flows of the Sodot Exchange API Vault.
 For the full documentation, please refer to the [Sodot Exchange API Vault documentation](https://docs.sodot.dev/exchange-api-vault/intro).
 
-The example shows how to:
+This is a minimal JS code that demonstrates the basic flows of the Exchange API Vault.
+A full tutorial that utilizes this codebase is available [here](https://docs.sodot.dev/exchange-api-vault/tutorial).
 
-1. Securely **import** keys into the distributed key management system.
-2. **Trade** with the imported key without the trading machine ever being exposed to the key.
+It shows how to:
+
+1. Securely **import** keys into the distributed system or **generating** keys within the system.
+2. **Trade** with the key without accessing the key.
 3. **Enforce a simple policy** for that key.
 
-## Running the example
-
-### Pre-requisites
+## Pre-requisites
 
 - Make sure you have NodeJS and NPM installed.
 
@@ -50,8 +51,14 @@ Install dependencies with:
 npm i
 ```
 
-Run with:
+Run a REST API trading flow (using HMAC-SHA256 API keys) with:
 
 ```bash
-npm start
+npm run hmac
+```
+
+Run a Websocket API flow (using Ed25519 API keys) with:
+
+```bash
+npm run ed25519
 ```
