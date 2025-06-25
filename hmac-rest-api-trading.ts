@@ -1,4 +1,4 @@
-import { splitHmacSha256KeyIntoShares } from '@sodot/sodot-hmac-key-sharing';
+import { splitHmacSha256KeyIntoEncryptedShares } from '@sodot/sodot-hmac-key-sharing';
 import { randomUUID } from 'crypto';
 import * as dotenv from 'dotenv';
 import { loadVerticesFromEnv } from './utils';
@@ -31,6 +31,20 @@ async function main() {
   console.log('Trade request sent successfully.');
 }
 
+async function getVertexPublicKey(vertex_url: string) {
+  const response = await fetch(`${vertex_url}/cluster/persistent-keygen-id`);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch public key from vertex ${vertex_url}: ${response.statusText}\n${await response.text()}`
+    );
+  }
+  const data = await response.json();
+  if (!data.keygen_id) {
+    throw new Error(`No keygen_id found in response from vertex ${vertex_url}`);
+  }
+  return data.keygen_id;
+}
+
 async function importHmacSecret(
   keyName: string,
   binanceApiSecret: string,
@@ -39,7 +53,19 @@ async function importHmacSecret(
   const apiKeyBytes = Uint8Array.from(binanceApiSecret, (char) =>
     char.charCodeAt(0)
   );
-  const shares = splitHmacSha256KeyIntoShares(apiKeyBytes);
+
+  // Fetch public keys from all vertices
+  // They will be used to encrypt the shares in order to securely distribute the HMAC secret
+  const verticesPubkeys = await Promise.all(
+    VERTICES.map((v) => getVertexPublicKey(v.url))
+  );
+
+  const shares = await splitHmacSha256KeyIntoEncryptedShares(
+    apiKeyBytes,
+    verticesPubkeys[0],
+    verticesPubkeys[1],
+    verticesPubkeys[2]
+  );
 
   await Promise.all(
     VERTICES.map(async (vertex, index) => {
@@ -53,7 +79,8 @@ async function importHmacSecret(
           method: 'POST',
           body: JSON.stringify({
             cluster_name: clusterName,
-            hmac_secret_share: shares[index],
+            key_share: shares[index],
+            encrypted: true,
             key_name: keyName,
           }),
         }
